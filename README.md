@@ -1,6 +1,6 @@
 # Remix Component Error Boundary
 
-This example includes a new `<ComponentErrorBoundary>` component that you can wrap around any non-critical component so that when an error occurs, it will not result in the default route `<`ErrorBoundary>`, which may replace the entire page.
+This example includes a new `<ComponentErrorBoundary>` component that you can wrap around any non-critical component so that when an error occurs, it will not result in the default route `<ErrorBoundary>`, which may replace the entire page.
 
 ## Usage
 
