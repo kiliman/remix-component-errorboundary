@@ -2,6 +2,10 @@
 
 This example includes a new `<ComponentErrorBoundary>` component that you can wrap around any non-critical component so that when an error occurs, it will not result in the default route `<ErrorBoundary>`, which may replace the entire page.
 
+## Example
+
+⚡️ StackBlitz https://stackblitz.com/github/kiliman/remix-component-errorboundary
+
 ## Usage
 
 Wrap your existing component with `<ComponentErrorBoundary>`. You can also provide your own `fallbackRenderer` or use the default.
