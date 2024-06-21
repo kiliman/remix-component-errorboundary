@@ -1,36 +1,44 @@
-# Welcome to Remix!
+# Remix Component Error Boundary
 
-- 📖 [Remix docs](https://remix.run/docs)
+This example includes a new `<ComponentErrorBoundary>` component that you can wrap around any non-critical component so that when an error occurs, it will not result in the default route `<`ErrorBoundary>`, which may replace the entire page.
 
-## Development
+## Usage
 
-Run the dev server:
+Wrap your existing component with `<ComponentErrorBoundary>`. You can also provide your own `fallbackRenderer` or use the default.
 
-```shellscript
-npm run dev
+```ts
+<ComponentErrorBoundary>
+  <Comments items={items} />
+</ComponentErrorBoundary>
+
+<ComponentErrorBoundary
+  fallbackRender={({ error }) => <p>💣 Oops! {error.message}</p>}
+>
+  <Comments items={items} />
+</ComponentErrorBoundary>
 ```
 
-## Deployment
+In your component, replace `useFetcher` with `useComponentFetcher`. This ensures it correctly handles error responses and triggers the error boundary. The
+`useComponetFetcher` hook also supports type inference. It removes the error response
+from the return type.
 
-First, build your app for production:
-
-```sh
-npm run build
+```ts
+export function Component({ items }: { items?: number[] }) {
+  const fetcher = useComponentFetcher<typeof loader>();
+  items = fetcher.data?.items ?? items ?? [];
 ```
 
-Then run the app in production mode:
+Finally, in your `loader` or `action`, do not throw errors or let them escape the function. You will need to wrap in `try/catch` and instead return an error object using the `error` helper function.
 
-```sh
-npm start
+```ts
+import { error } from "~/utils/responses";
+export async function loader() {
+  try {
+    // do stuff
+    return json(data);
+  } catch (e) {
+    // catch errors and return using helper
+    return error(e);
+  }
+}
 ```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
