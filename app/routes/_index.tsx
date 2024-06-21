@@ -1,4 +1,6 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Link, json } from "@remix-run/react";
+import Widget from "~/components/widget";
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,35 +9,24 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  if (url.searchParams.has("error")) {
+    throw new Error("This is an error");
+  }
+  return json({ message: "Hello, world!" });
+}
+
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Remix</h1>
       <ul>
         <li>
-          <a
-            target="_blank"
-            href="https://remix.run/start/quickstart"
-            rel="noreferrer"
-          >
-            5m Quick Start
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/start/tutorial"
-            rel="noreferrer"
-          >
-            30m Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
+          <Link to="/?error">Trigger Route Error</Link>
         </li>
       </ul>
+      <Widget />
     </div>
   );
 }
